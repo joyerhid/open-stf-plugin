@@ -1,3 +1,7 @@
+
+# User-specific stuff:
+.idea
+
 *.class
 
 # Mobile Tools for Java (J2ME)

@@ -11,6 +11,7 @@ import hudson.model.TaskListener;
 import hudson.plugins.android_emulator.sdk.AndroidSdk;
 import hudson.plugins.android_emulator.sdk.Tool;
 import hudson.plugins.android_emulator.util.Utils;
+import hudson.plugins.android_emulator.sdk.cli.SdkCliCommand;
 import hudson.util.ArgumentListBuilder;
 import hudson.util.NullStream;
 import io.swagger.client.model.DeviceListResponseDevices;
@@ -129,7 +130,7 @@ public class AndroidRemoteContext {
    * @return Arguments including the full path to the SDK and any extra Windows stuff required.
    */
   public ArgumentListBuilder getToolCommand(Tool tool, String args) {
-    return Utils.getToolCommand(sdk, launcher.isUnix(), tool, args);
+    return Utils.getToolCommand(sdk, launcher.isUnix(), new SdkCliCommand(tool, args));
   }
 
   /**
@@ -144,7 +145,7 @@ public class AndroidRemoteContext {
    */
   public ProcStarter getToolProcStarter(Tool tool, String args)
       throws IOException, InterruptedException {
-    return getProcStarter(Utils.getToolCommand(sdk, launcher.isUnix(), tool, args));
+    return getProcStarter(Utils.getToolCommand(sdk, launcher.isUnix(), new SdkCliCommand( tool, args)));
   }
 
   public DeviceListResponseDevices getDevice() {
