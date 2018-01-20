@@ -54,9 +54,6 @@ public class STFDeviceConditionAxis extends Axis {
     public ListBoxModel doFillTypeItems() {
 
       Jenkins hudsonInstance = Jenkins.getInstance();
-      if (hudsonInstance == null) {
-        return new ListBoxModel();
-      }
 
       STFBuildWrapper.DescriptorImpl descriptor = hudsonInstance
           .getDescriptorByType(STFBuildWrapper.DescriptorImpl.class);
@@ -74,9 +71,6 @@ public class STFDeviceConditionAxis extends Axis {
     public ListBoxModel doFillValuesItems(@QueryParameter String type) {
 
       Jenkins hudsonInstance = Jenkins.getInstance();
-      if (hudsonInstance == null) {
-        return new ListBoxModel();
-      }
 
       STFBuildWrapper.DescriptorImpl descriptor = hudsonInstance
           .getDescriptorByType(STFBuildWrapper.DescriptorImpl.class);

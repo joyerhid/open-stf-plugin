@@ -79,11 +79,6 @@ public class STFBuildWrapper extends BuildWrapper {
     final PrintStream logger = listener.getLogger();
 
     Jenkins hudsonInstance = Jenkins.getInstance();
-    if (hudsonInstance == null) {
-      log(logger, Messages.CANNOT_GET_HUDSON_INSTANCE());
-      build.setResult(Result.FAILURE);
-      return null;
-    }
 
     if (descriptor == null) {
       descriptor = hudsonInstance.getDescriptorByType(DescriptorImpl.class);
@@ -114,12 +109,8 @@ public class STFBuildWrapper extends BuildWrapper {
     Utils.setupSTFApiClient(stfApiEndpoint, ignoreCertError, stfToken);
 
     // SDK location
-    Node node = Computer.currentComputer().getNode();
     String androidHome = hudson.plugins.android_emulator.util.Utils
-        .expandVariables(envVars, buildVars, emulatorDescriptor.androidHome);
-    androidHome = hudson.plugins.android_emulator.util.Utils
-        .discoverAndroidHome(launcher, node, envVars, androidHome);
-
+				.getConfiguredAndroidHome();
     // Validate Setting values
     String configError = isConfigValid(stfApiEndpoint, ignoreCertError, stfToken);
     if (configError != null) {
@@ -358,11 +349,14 @@ public class STFBuildWrapper extends BuildWrapper {
     int sleep = timeout / (int) (Math.sqrt(timeout / (double) 1000) * 2);
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     ArgumentListBuilder adbDevicesCmd = remote.getToolCommand(Tool.ADB, "devices");
+    boolean shownUnauthorizedOnce = false;
 
     try {
       while (System.currentTimeMillis() < start + timeout) {
         remote.getProcStarter(adbDevicesCmd).stdout(out).stderr(out).start()
             .joinWithTimeout(5L, TimeUnit.SECONDS, remote.launcher().getListener());
+
+        int unauthorized = 0;
 
         String devicesResult = out.toString(Utils.getDefaultCharset().displayName());
         String lineSeparator =
@@ -371,6 +365,16 @@ public class STFBuildWrapper extends BuildWrapper {
           if (line != null) {
             if (line.contains(remote.serial()) && line.contains("device")) {
               return true;
+            }
+
+            if (line.contains(remote.serial()) && line.contains("unauthorized")) {
+                unauthorized++;
+
+                //Show without rising exception, that we can't authorize device
+                if (unauthorized == 4 && !shownUnauthorizedOnce) {
+                    log(remote.logger(), Messages.DEVICE_UNAUTHORIZED());
+                    shownUnauthorizedOnce=true;
+                }
             }
           }
         }

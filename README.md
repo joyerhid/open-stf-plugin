@@ -8,3 +8,9 @@ open-stf-plugin
 # Dependent plugins
  - [Android Emulator Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Android+Emulator+Plugin)
  - [jQuery Plugin](https://wiki.jenkins-ci.org/display/JENKINS/jQuery+Plugin)
+
+#Requirements
+Jenkins
+
+Jenkins version 2.32 or newer is required
+
