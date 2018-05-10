@@ -189,7 +189,7 @@
   <repositories>
     <repository>
       <id>github-maven</id>
-      <url>https://raw.github.com/justice3120/stf-java-client/branch-ver1.0.5/</url>
+      <url>https://raw.github.com/justice3120/stf-java-client/branch-ver1.0.6/</url>
       <snapshots>
         <enabled>true</enabled>
         <updatePolicy>always</updatePolicy>

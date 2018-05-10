@@ -18,6 +18,8 @@ Open STF [verion 2.0](https://github.com/openstf/stf) or later.
 * [Maven](https://maven.apache.org/) - Dependency Management
 
 ## Release History
+* 1.0.8
+    * Fix for compatibility with JEP-200 - Stop trying to serialize deviceCondition.
 
 * 1.0.7
     * Fix for compatibility with [android-emulator v3.0](https://wiki.jenkins-ci.org/display/JENKINS/Android+Emulator+Plugin)
