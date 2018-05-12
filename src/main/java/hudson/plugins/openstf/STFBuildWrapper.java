@@ -58,7 +58,7 @@ public class STFBuildWrapper extends BuildWrapper {
   private DescriptorImpl descriptor;
   private AndroidEmulator.DescriptorImpl emulatorDescriptor;
 
-  public JSONObject deviceCondition;
+  public transient JSONObject deviceCondition;
   public final int deviceReleaseWaitTime;
 
   /**
