@@ -9,7 +9,7 @@
 
   <artifactId>open-stf</artifactId>
   <packaging>hpi</packaging>
-  <version>1.0.9-SNAPSHOT</version>
+  <version>1.0.9.1</version>
   <name>Open STF Plugin</name>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Open+STF+Plugin</url>
 
@@ -165,26 +165,6 @@
     <url>https://github.com/jenkinsci/open-stf-plugin</url>
     <tag>HEAD</tag>
   </scm>
-
-  <reporting>
-    <plugins>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <configuration>
-              <configLocation>config/google_checks.xml</configLocation>
-          </configuration>
-      </plugin>
-      <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <configuration>
-              <effort>Max</effort>
-              <xmlOutput>true</xmlOutput>
-          </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 
   <repositories>
     <repository>
