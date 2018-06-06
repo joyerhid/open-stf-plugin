@@ -120,8 +120,9 @@ public class STFBuildWrapper extends BuildWrapper {
     }
 
     // Confirm that the required SDK tools are available
+    Node node = Computer.currentComputer().getNode();
     AndroidSdk androidSdk = hudson.plugins.android_emulator.util.Utils
-        .getAndroidSdk(launcher, androidHome, null);
+        .getAndroidSdk(launcher, node, envVars, androidHome, null);
     if (androidSdk == null) {
       if (!emulatorDescriptor.shouldInstallSdk) {
         // Couldn't find an SDK, don't want to install it, give up

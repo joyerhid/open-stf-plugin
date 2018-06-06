@@ -39,8 +39,8 @@ public class STFReservedDeviceAction implements Action {
 
   @Exported
   public String getSummary() {
-    return Messages.PUBLISH_RESERVED_DEVICE_INFO(reservedDevice.name, reservedDevice.sdk,
-        reservedDevice.version);
+    return Messages.PUBLISH_RESERVED_DEVICE_INFO(reservedDevice.name, reservedDevice.manufacturer, reservedDevice.model,
+            reservedDevice.sdk, reservedDevice.version);
   }
 
   public String getDisplayName() {
