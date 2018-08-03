@@ -58,17 +58,17 @@ public class STFBuildWrapper extends BuildWrapper {
   private DescriptorImpl descriptor;
   private AndroidEmulator.DescriptorImpl emulatorDescriptor;
 
-  public JSONObject deviceCondition;
+  public DeviceConditions deviceConditions;
   public final int deviceReleaseWaitTime;
 
   /**
    * Allocates a STFBuildWrapper object.
-   * @param deviceCondition Condition set of the STF device user want to use.
+   * @param deviceConditions Condition set of the STF device user want to use.
    * @param deviceReleaseWaitTime Waiting-time for the STF device to be released
    */
   @DataBoundConstructor
-  public STFBuildWrapper(JSONObject deviceCondition, int deviceReleaseWaitTime) {
-    this.deviceCondition = deviceCondition;
+  public STFBuildWrapper(DeviceConditions deviceConditions, int deviceReleaseWaitTime) {
+    this.deviceConditions = deviceConditions;
     this.deviceReleaseWaitTime = deviceReleaseWaitTime;
   }
 
@@ -97,7 +97,7 @@ public class STFBuildWrapper extends BuildWrapper {
     Boolean useSpecificKey = descriptor.useSpecificKey;
     String adbPublicKey = descriptor.adbPublicKey;
     String adbPrivateKey = descriptor.adbPrivateKey;
-    JSONObject deviceFilter = Utils.expandVariables(envVars, buildVars, this.deviceCondition);
+    JSONObject deviceFilter = Utils.expandVariables(envVars, buildVars, this.deviceConditions.toJsonObject());
     boolean ignoreCertError = descriptor.ignoreCertError;
 
     if (!Utils.validateDeviceFilter(deviceFilter)) {
@@ -168,7 +168,7 @@ public class STFBuildWrapper extends BuildWrapper {
       remote.setDevice(device);
       log(logger, Messages.SHOW_RESERVED_DEVICE_INFO(device.name, device.serial,
           device.sdk, device.version));
-      build.addAction(new STFReservedDeviceAction(descriptor.stfApiEndpoint, device));
+      build.addAction(new STFReservedDeviceAction(descriptor.stfApiEndpoint, ReservedDevice.from(device)));
     } catch (STFException ex) {
       log(logger, ex.getMessage());
       build.setResult(Result.NOT_BUILT);
@@ -444,22 +444,22 @@ public class STFBuildWrapper extends BuildWrapper {
         formData.discard("deviceReleaseWaitTime");
       }
 
+      DeviceConditions deviceConditions = new DeviceConditions();
+
       JSONArray conditionArray = formData.optJSONArray("condition");
       if (conditionArray != null) {
         for (Object conditionObj: conditionArray) {
           JSONObject condition = JSONObject.fromObject(conditionObj);
-          deviceCondition
-              .put(condition.getString("conditionName"), condition.getString("conditionValue"));
+          deviceConditions.putCondition(condition.getString("conditionName"), condition.getString("conditionValue"));
         }
       } else {
         JSONObject condition = formData.optJSONObject("condition");
         if (condition != null) {
-          deviceCondition
-              .put(condition.getString("conditionName"), condition.getString("conditionValue"));
+          deviceConditions.putCondition(condition.getString("conditionName"), condition.getString("conditionValue"));
         }
       }
 
-      return new STFBuildWrapper(deviceCondition, deviceReleaseWaitTime);
+      return new STFBuildWrapper(deviceConditions, deviceReleaseWaitTime);
     }
 
     @Override

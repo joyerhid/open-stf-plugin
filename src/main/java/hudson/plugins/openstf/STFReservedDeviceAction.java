@@ -10,9 +10,9 @@ import java.net.URL;
 
 public class STFReservedDeviceAction implements BuildBadgeAction, Action {
   private final String stfApiEndpoint;
-  private final DeviceListResponseDevices reservedDevice;
+  private final ReservedDevice reservedDevice;
 
-  public STFReservedDeviceAction(String stfApiEndpoint, DeviceListResponseDevices reservedDevice) {
+  public STFReservedDeviceAction(String stfApiEndpoint, ReservedDevice reservedDevice) {
     this.stfApiEndpoint = stfApiEndpoint;
     this.reservedDevice = reservedDevice;
   }

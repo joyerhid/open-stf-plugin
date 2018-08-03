@@ -10,13 +10,13 @@
         <table style="margin-left:2em">
           <f:section title="${%Conditions of the device you want to use}">
             <f:block>
-              <f:repeatable var="condition" items="${instance.deviceCondition.keySet()}">
+              <f:repeatable var="condition" items="${instance.deviceConditions.toJsonObject().keySet()}">
                 <table>
                   <f:entry title="ConditionName" field="conditionName">
                     <f:select value="${condition.toString()}" />
                   </f:entry>
                   <f:entry title="Value" field="conditionValue" help="/plugin/open-stf/help-conditionValue.html">
-                    <f:combobox value="${instance.deviceCondition.optString(condition.toString())}" clazz="stf-filter"
+                    <f:combobox value="${instance.deviceConditions.toJsonObject().optString(condition.toString())}" clazz="stf-filter"
                         checkUrl="'descriptorByName/STFBuildWrapper/checkConditionValue?value='+escape(this.value)"/>
                   </f:entry>
                   <f:entry><f:repeatableDeleteButton /></f:entry>
