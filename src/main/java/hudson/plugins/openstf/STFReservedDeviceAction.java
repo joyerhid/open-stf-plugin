@@ -1,13 +1,14 @@
 package hudson.plugins.openstf;
 
 import hudson.model.Action;
+import hudson.model.BuildBadgeAction;
 import hudson.plugins.openstf.Messages;
 import io.swagger.client.model.DeviceListResponseDevices;
 import org.kohsuke.stapler.export.Exported;
 
 import java.net.URL;
 
-public class STFReservedDeviceAction implements Action {
+public class STFReservedDeviceAction implements BuildBadgeAction, Action {
   private final String stfApiEndpoint;
   private final DeviceListResponseDevices reservedDevice;
 
@@ -40,7 +41,12 @@ public class STFReservedDeviceAction implements Action {
   @Exported
   public String getSummary() {
     return Messages.PUBLISH_RESERVED_DEVICE_INFO(reservedDevice.name, reservedDevice.manufacturer, reservedDevice.model,
-            reservedDevice.sdk, reservedDevice.version);
+            reservedDevice.sdk, reservedDevice.version, reservedDevice.notes);
+  }
+
+  @Exported
+  public boolean getShowBadge() {
+    return reservedDevice != null;
   }
 
   public String getDisplayName() {

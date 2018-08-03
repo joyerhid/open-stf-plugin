@@ -30,7 +30,7 @@ public class AndroidRemoteContext {
   private int adbServerPort;
   protected String serial;
 
-  protected PortAllocationManager portAllocator;
+  //protected PortAllocationManager portAllocator;
 
   private AndroidSdk sdk;
   private DeviceListResponseDevices stfDevice = null;
@@ -49,16 +49,17 @@ public class AndroidRemoteContext {
 
     final Computer computer = Computer.currentComputer();
 
+    // !!! This screws with other utilities that use ADB, just use default ADB port for now (perhaps make an option later)
     // Use the Port Allocator plugin to reserve the ports we need
-    portAllocator = PortAllocationManager.getManager(computer);
-    int[] ports =
-        portAllocator.allocatePortRange(this.build, PORT_RANGE_START, PORT_RANGE_END, 1, true);
-    adbServerPort = ports[0];
+//    portAllocator = PortAllocationManager.getManager(computer);
+//    int[] ports =
+//        portAllocator.allocatePortRange(this.build, PORT_RANGE_START, PORT_RANGE_END, 1, true);
+    adbServerPort = 5037;
   }
 
   public void cleanUp() {
     // Free up the TCP ports
-    portAllocator.free(adbServerPort);
+    //portAllocator.free(adbServerPort);
   }
 
   public int adbServerPort() {
@@ -103,7 +104,7 @@ public class AndroidRemoteContext {
     if (launcher.isUnix()) {
       buildEnvironment.put("LD_LIBRARY_PATH", String.format("%s/tools/lib", sdk.getSdkRoot()));
     }
-    return launcher.launch().stdout(new NullStream()).stderr(logger()).envs(buildEnvironment);
+    return launcher.launch().stdout(logger()).stderr(logger()).envs(buildEnvironment);
   }
 
   /**
